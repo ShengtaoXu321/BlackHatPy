@@ -32,7 +32,7 @@
 
 ## Aim
 
-<div align="center">
+<div align="left">
     <img  src="https://github-readme-streak-stats.herokuapp.com/?user=Achuan-2" />
 </div>
 
