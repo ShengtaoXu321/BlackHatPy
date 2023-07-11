@@ -24,7 +24,7 @@ source venv3/bin/activate # 运行active脚本激活这个环境
 deactivate # 退出虚拟环境
 ```
 
-![image-20230711213852156](/Users/xst/Library/Application Support/typora-user-images/image-20230711213852156.png)
+![image-20230711213852156](/Users/xst/Desktop/Black-Hat-Py/bhp/pic/image-20230711213852156.png)
 
 ## 1.3 在venv虚拟环境中pip安装软件包
 
@@ -40,11 +40,11 @@ pip search hashcrack
 pip install lxml
 ```
 
-![image-20230711215020467](/Users/xst/Library/Application Support/typora-user-images/image-20230711215020467.png)
+![image-20230711215020467](/Users/xst/Desktop/Black-Hat-Py/bhp/pic/image-20230711215020467.png)
 
 别问上面为啥报错，`pip search`报错一搜一堆问题，这里不探讨了。要么直接`pip isntall`，要么直接转向`Conda`。记住，这不是镜像源的原因，我是全局代理。
 
-![image-20230711215243300](/Users/xst/Library/Application Support/typora-user-images/image-20230711215243300.png)
+![image-20230711215243300](/Users/xst/Desktop/Black-Hat-Py/bhp/pic/image-20230711215243300.png)
 
 
 
