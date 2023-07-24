@@ -41,7 +41,7 @@ if __name__ == '__main__':
     parser.add_argument('-e', '--execute', help='execute specified command')
     parser.add_argument('-l', '--listen', action='store_true', help='listen')
     parser.add_argument('-p', '--port', type=int, default=999, help='specified port')
-    parser.add_argument('-t', '--target', default='192.168.1.1', help='specified ip')
+    parser.add_argument('-t', '--target', default='192.168.20.123', help='specified ip')
     parser.add_argument('-u', '--upload',  help='upload file')
 
     # 调用 parser.parse_args() 来解析上面paser.add_argument()命令行参数
@@ -51,5 +51,5 @@ if __name__ == '__main__':
     else:
         buffer = sys.stdin.read()   # 否则，就从标准输入 读取数据
 
-    nc = NetCat(args, buffer.encode())    # 实例化一个NetCat 类的nc对象
-    nc.run      # 启动程序
+    nc = NetCat(args, buffer.encode('utf-8'))    # 实例化一个NetCat 类的nc对象
+    nc.run()      # 启动程序

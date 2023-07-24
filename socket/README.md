@@ -289,5 +289,18 @@ cli.close()
 
 编写一个nc工具，使用`python`
 
+代码请参考`nc`文件夹内文件
 
+现在我们来看一下使用过程：
 
+* `-h` 使用帮助
+
+  `python3 netcat.py -h`或者`python3 netcat.py --help`
+
+  ![image-20230724131624485](/Users/xst/Library/Application Support/typora-user-images/image-20230724131624485.png)
+
+* 服务端 `-l -p`
+
+  `python3 netcat.py -t 127.0.0.1 -p 999 -l -c`
+
+  

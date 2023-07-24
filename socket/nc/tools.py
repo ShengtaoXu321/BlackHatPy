@@ -23,8 +23,11 @@ def execute(cmd):
     # cmd_split = shlex.split(cmd)
     # print(cmd_split)
     output = subprocess.check_output(shlex.split(cmd), stderr=subprocess.STDOUT)    # check_output()会在本机运行一条命令
+    """
     # shlex.split(cmd) 将传入的 cmd 字符串按照空格分割为一个命令和参数的列表。
     # stderr = subprocess.STDOUT：这个参数指定将标准错误输出（stderr）与标准输出（stdout）合并
     # subprocess.check_output()是subprocess模块中的一个方法，用于执行命令并捕获其输出。
+    """
+
 
     return output.decode()
