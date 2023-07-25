@@ -57,16 +57,16 @@ class NetCat:
                 response = ''
                 while recv_len:
                     data = self.socket.recv(4096)
-                    recv_len=len(data)
+                    recv_len = len(data)
                     response += data.decode()
                     if recv_len < 4096:      # 退出循环的条件
                         break
 
-                    if response:
-                        print(response)
-                        buffer = input(b'Next: #> ')  # 输出完response内容，暂停等待用户的输入才继续
-                        buffer += '\n'
-                        self.socket.send(buffer.encode())    # 发送出用户输入的新内容，进行下一轮新循环
+                if response:     # 外循环，否则可能就执行不到这个了
+                    print(response)
+                    buffer = input(f'{self.args.target}@ $ > ')  # 输出完response内容，暂停等待用户的输入才继续
+                    buffer += '\n'
+                    self.socket.send(buffer.encode())    # 发送出用户输入的新内容，进行下一轮新循环
         except KeyboardInterrupt:    # 按下ctr+c就退出循环
             print('User terminated.')
             self.socket.close()
@@ -131,12 +131,14 @@ class NetCat:
             cmd_buffer = b''  # 存储发送的命令
             while True:
                 try:
-                    client_socket.send(b'BHP: #> ')    # 向发送方发送提示符：black hat python，等到其发回命令
+                    client_socket.send(b'# > ')    # 向发送方发送提示符：black hat python，等到其发回命令
                     while '\n' not in cmd_buffer.decode():
                         cmd_buffer += client_socket.recv(64)   # 客户端收到的内容拼接到buf中
                     response = execute(cmd_buffer.decode())    # 调用execute()函数
                     if response:
+                        # print(response)   # 加上这个会返回打印数据
                         client_socket.send(response.encode())   # 向发送方发送执行命令后的输出内容
+                        pass
                     cmd_buffer = b''     # 将 cmd_buffer 重置为空，准备接收下一个命令。
                 except Exception as e:
                     print(f'Server Killded {e}')

@@ -297,10 +297,120 @@ cli.close()
 
   `python3 netcat.py -h`或者`python3 netcat.py --help`
 
-  ![image-20230724131624485](/Users/xst/Library/Application Support/typora-user-images/image-20230724131624485.png)
+  ```shell
+  xxx@xxx nc % python3 netcat.py -h
+  usage: netcat.py [-h] [-c] [-e EXECUTE] [-l] [-p PORT] [-t TARGET] [-u UPLOAD]
+  
+  BHP Net Tool
+  
+  optional arguments:
+    -h, --help            show this help message and exit
+    -c, --command         command shell
+    -e EXECUTE, --execute EXECUTE
+                          execute specified command
+    -l, --listen          listen
+    -p PORT, --port PORT  specified port
+    -t TARGET, --target TARGET
+                          specified ip
+    -u UPLOAD, --upload UPLOAD
+                          upload file
+  
+  Example:
+              netcat.py -t 192.168.1.108 -p 555 -l -c   # command shell
+              netcat.py -t 192.168.1.108 -p 555 -l -u=mytest.txt   # upload to file
+              netcat.py -t 192.168.1.108 -p 555 -l -e="cat /etc/passwd"  # execute command
+              echo 'ABC' | ./netcat/py -t 192.168.1.1 -p 999 # echo text to server port 999
+              netcat.py -t 192.168.1.1 -p 5555 # connect to server
+  ```
+
+  
 
 * 服务端 `-l -p`
 
   `python3 netcat.py -t 127.0.0.1 -p 999 -l -c`
 
-  
+* 客户端
+
+  ``python3 netcat.py -t 127.0.0.1 -p 999 ``
+
+**补充：**
+
+这里补充一下，自己犯的错误，真的该打
+
+```python
+        try:
+            while True:    # 大循环，对数据进行接收，以4096为单位，小于直接接收；大于则以4096分段接收
+                recv_len = 1
+                response = ''
+                while recv_len:
+                    data = self.socket.recv(4096)
+                    recv_len = len(data)
+                    response += data.decode()
+                    if recv_len < 4096:      # 退出循环的条件
+                        break
+
+                if response:     # 外循环，否则可能就执行不到这个了
+                    print(response)
+                    buffer = input(f'{self.args.target}@ $ > ')  # 输出完response内容，暂停等待用户的输入才继续
+                    buffer += '\n'
+                    self.socket.send(buffer.encode())    # 发送出用户输入的新内容，进行下一轮新循环
+        except KeyboardInterrupt:    # 按下ctr+c就退出循环
+            print('User terminated.')
+            self.socket.close()
+            sys.exit()
+            
+# ============================================================
+被我错误❎成了
+
+while recv_len:
+                    data = self.socket.recv(4096)
+                    recv_len = len(data)
+                    response += data.decode()
+                    if recv_len < 4096:      # 退出循环的条件
+                        break
+
+                    if response:     # 外循环，否则可能就执行不到这个了
+                       print(response)
+                       ...
+                     
+ # 这将导致无限死循环
+```
+
+
+
+**评价**：
+
+* 不好用，代码根本没有考虑网络编程中的一些出现的问题，拥塞、堵塞、异常统统没细考虑
+* 没有nc那样智能，可以正向shell或者反向shell，这个只能单通信
+* 虽然功能简单：命令执行、上传文件、shell，但是对小白理解`简单版netcat`很有用
+* 可以魔改，目前还没想到，先学习
+
+
+
+## TCP代理
+
+### TCP代理作用
+
+* 在主机之间转发流量
+* 检测一些网络软件
+* 分析未知协议
+* 篡改应用的网络流量
+* 为Fuzzer创建测试用例
+
+使用场景：无法使用Wireshark，无法在windows上加兹安驱动嗅探本地回环流量
+
+
+
+### TCP代理需求分析
+
+1. 把本地设备和远程设备之间的通信过程显示到屏幕上（hexdump函数）
+2. 从本地设备或远程设备的入口socket接收数据（receive_from函数）
+3. 控制远程设备和本地设备之间的流量方向（proxy_handler函数）
+4. 监听socket，并把传递给proxy_handler (server_loop函数)
+
+
+
+### TCP代理：`proxy.py`
+
+
+

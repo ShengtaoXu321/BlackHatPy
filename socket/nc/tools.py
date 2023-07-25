@@ -17,7 +17,7 @@ def execute(cmd):
     :return:
     """
     cmd = cmd.strip()   # 去除首尾空格
-    print(cmd+'*')
+    # print(cmd+'*')
     if not cmd:         # 无输入则返回
         return
     # cmd_split = shlex.split(cmd)
